@@ -58,8 +58,7 @@ Vector<string> addCodonToRnaStrands(const string codon, const Vector<string>& rn
         return newRnaStrands;
     } else {
         newRnaStrands.add(rnaStrands[i] + codon);
-        i++;
-        return newRnaStrands + addCodonToRnaStrands(codon, rnaStrands, i);
+        return newRnaStrands + addCodonToRnaStrands(codon, rnaStrands, ++i);
     }
 }
 
@@ -94,7 +93,6 @@ void assembleAllRNAStrandsFor(string protein,
         //   with every existing element in $rnaStrands;
         //   in other words, we need to generate the permutations
         rnaStrands = permuteCodons(particularCodons, rnaStrands);
-        
         assembleAllRNAStrandsFor(protein.substr(1), codons, rnaStrands);
     }
 }
@@ -102,7 +100,6 @@ void assembleAllRNAStrandsFor(string protein,
 void listAllRNAStrandsFor(string protein, Map<char, Set<string> >& codons) {
     Vector<string> rnaStrands;
     assembleAllRNAStrandsFor(protein, codons, rnaStrands);
-    
     cout << rnaStrands << endl;
 }
 
