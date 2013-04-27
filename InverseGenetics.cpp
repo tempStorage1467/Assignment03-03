@@ -52,19 +52,29 @@ int main() {
     return 0;
 }
 
-void permuteCodons(Set<string>& particularCodons, Set<string>& rnaStrands) {
+Vector<string> permuteCodons(Set<string>& particularCodons, const Vector<string>& rnaStrands) {
+    Vector<string> newRnaStrands;
     if (particularCodons.size() == 0) {
-        return;
+        Vector<string> emptyVec;
+        return emptyVec;
+    } else if (rnaStrands.size() == 0) {
+        string codon = particularCodons.first();
+        newRnaStrands.add(codon);
+        particularCodons -= codon;
+        return newRnaStrands + permuteCodons(particularCodons, rnaStrands);
     } else {
         string codon = particularCodons.first();
-        // stuck.. need to figure out how to recursively
-        // put the codon into each vector but not dup within the codon set
+        for (int i = 0; i < rnaStrands.size(); i++) {
+            newRnaStrands.add(rnaStrands[i] + codon);
+        }
+        particularCodons -= codon;
+        return newRnaStrands + permuteCodons(particularCodons, rnaStrands);
     }
 }
 
 void assembleAllRNAStrandsFor(string protein,
                            Map<char, Set<string> >& codons,
-                           Set<string>& rnaStrands) {
+                           Vector<string>& rnaStrands) {
     if (protein == "") {
         return;
     } else {
@@ -73,18 +83,23 @@ void assembleAllRNAStrandsFor(string protein,
         // take each element in $particularCodons and do a cross-join
         //   with every existing element in $rnaStrands;
         //   in other words, we need to generate the permutations
-        permuteCodons(particularCodons, rnaStrands);
+        rnaStrands = permuteCodons(particularCodons, rnaStrands);
 
         assembleAllRNAStrandsFor(protein.substr(1), codons, rnaStrands);
     }
 }
 
 void listAllRNAStrandsFor(string protein, Map<char, Set<string> >& codons) {
-    Set<string> rnaStrands;
+    Vector<string> rnaStrands;
     assembleAllRNAStrandsFor(protein, codons, rnaStrands);
-    for (string rnaStrand : rnaStrands) {
-        cout << rnaStrands << endl;
-    }
+
+//   Set<string> set1;
+//    set1 += "UUG", "UGG";
+//    rnaStrands.clear();
+//    rnaStrands.add("AAA");
+//    rnaStrands.add("AAG");
+//    rnaStrands = permuteCodons(set1, rnaStrands);
+    cout << rnaStrands << endl;
 }
 
 /* You do not need to change this function. */
