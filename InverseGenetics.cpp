@@ -43,13 +43,24 @@ Map<char, Set<string> > loadCodonMap();
 int main() {
     /* Load the codon map. */
     Map<char, Set<string> > codons = loadCodonMap();
-
+    
     /* Get protein */
     string protein = "KWS";
-
+    
     /* Assemble RNA Strands */
     listAllRNAStrandsFor(protein, codons);
     return 0;
+}
+
+Vector<string> addCodonToRnaStrands(const string codon, const Vector<string>& rnaStrands, int i) {
+    Vector<string> newRnaStrands;
+    if (i == rnaStrands.size()) {
+        return newRnaStrands;
+    } else {
+        newRnaStrands.add(rnaStrands[i] + codon);
+        i++;
+        return newRnaStrands + addCodonToRnaStrands(codon, rnaStrands, i);
+    }
 }
 
 Vector<string> permuteCodons(Set<string>& particularCodons, const Vector<string>& rnaStrands) {
@@ -65,18 +76,15 @@ Vector<string> permuteCodons(Set<string>& particularCodons, const Vector<string>
         return newRnaStrands + permuteCodons(particularCodons, rnaStrands);
     } else {
         string codon = particularCodons.first();
-        // TODO: Need to get iteration out
-        for (int i = 0; i < rnaStrands.size(); i++) {
-            newRnaStrands.add(rnaStrands[i] + codon);
-        }
+        newRnaStrands = addCodonToRnaStrands(codon, rnaStrands, 0);
         particularCodons -= codon;
         return newRnaStrands + permuteCodons(particularCodons, rnaStrands);
     }
 }
 
 void assembleAllRNAStrandsFor(string protein,
-                           Map<char, Set<string> >& codons,
-                           Vector<string>& rnaStrands) {
+                              Map<char, Set<string> >& codons,
+                              Vector<string>& rnaStrands) {
     if (protein == "") {
         return;
     } else {
@@ -86,7 +94,7 @@ void assembleAllRNAStrandsFor(string protein,
         //   with every existing element in $rnaStrands;
         //   in other words, we need to generate the permutations
         rnaStrands = permuteCodons(particularCodons, rnaStrands);
-
+        
         assembleAllRNAStrandsFor(protein.substr(1), codons, rnaStrands);
     }
 }
@@ -94,7 +102,7 @@ void assembleAllRNAStrandsFor(string protein,
 void listAllRNAStrandsFor(string protein, Map<char, Set<string> >& codons) {
     Vector<string> rnaStrands;
     assembleAllRNAStrandsFor(protein, codons, rnaStrands);
-
+    
     cout << rnaStrands << endl;
 }
 
