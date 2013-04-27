@@ -45,18 +45,24 @@ int main() {
     Map<char, Set<string> > codons = loadCodonMap();
     
     /* Get protein */
-    string protein = "KWS";
+    string protein = "KWSL";
     
     /* Assemble RNA Strands */
     listAllRNAStrandsFor(protein, codons);
     return 0;
 }
 
+/*
+ * For RNA Strands such as {"AAG", "AAA"}, add a specific codon such as "UGG"
+ *   which makes the resulting RNA Strands collection look like:
+ *   {"AAGUGG", "AAAUGG"}
+ */
 Vector<string> addCodonToRnaStrands(const string codon,
                                     const Vector<string>& rnaStrands,
                                     int i) {
     Vector<string> newRnaStrands;
     if (i == rnaStrands.size()) {
+        // Base Case: Codon added to all existing RNA strands
         return newRnaStrands;
     } else {
         newRnaStrands.add(rnaStrands[i] + codon);
@@ -64,6 +70,9 @@ Vector<string> addCodonToRnaStrands(const string codon,
     }
 }
 
+/*
+ *
+ */
 Vector<string> permuteCodons(Set<string>& particularCodons,
                              const Vector<string>& rnaStrands) {
     Vector<string> newRnaStrands;
