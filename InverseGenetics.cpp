@@ -52,7 +52,9 @@ int main() {
     return 0;
 }
 
-Vector<string> addCodonToRnaStrands(const string codon, const Vector<string>& rnaStrands, int i) {
+Vector<string> addCodonToRnaStrands(const string codon,
+                                    const Vector<string>& rnaStrands,
+                                    int i) {
     Vector<string> newRnaStrands;
     if (i == rnaStrands.size()) {
         return newRnaStrands;
@@ -62,7 +64,8 @@ Vector<string> addCodonToRnaStrands(const string codon, const Vector<string>& rn
     }
 }
 
-Vector<string> permuteCodons(Set<string>& particularCodons, const Vector<string>& rnaStrands) {
+Vector<string> permuteCodons(Set<string>& particularCodons,
+                             const Vector<string>& rnaStrands) {
     Vector<string> newRnaStrands;
     if (particularCodons.size() == 0) {
         Vector<string> emptyVec;
@@ -81,8 +84,8 @@ Vector<string> permuteCodons(Set<string>& particularCodons, const Vector<string>
     }
 }
 
-void assembleAllRNAStrandsFor(string protein,
-                              Map<char, Set<string> >& codons,
+void assembleAllRNAStrandsFor(string protein, Map<char,
+                              Set<string> >& codons,
                               Vector<string>& rnaStrands) {
     if (protein == "") {
         return;
