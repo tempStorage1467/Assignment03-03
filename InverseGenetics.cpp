@@ -58,12 +58,14 @@ Vector<string> permuteCodons(Set<string>& particularCodons, const Vector<string>
         Vector<string> emptyVec;
         return emptyVec;
     } else if (rnaStrands.size() == 0) {
+        // TODO: Stuck with a odd case with $rnaStrands is empty
         string codon = particularCodons.first();
         newRnaStrands.add(codon);
         particularCodons -= codon;
         return newRnaStrands + permuteCodons(particularCodons, rnaStrands);
     } else {
         string codon = particularCodons.first();
+        // TODO: Need to get iteration out
         for (int i = 0; i < rnaStrands.size(); i++) {
             newRnaStrands.add(rnaStrands[i] + codon);
         }
@@ -93,12 +95,6 @@ void listAllRNAStrandsFor(string protein, Map<char, Set<string> >& codons) {
     Vector<string> rnaStrands;
     assembleAllRNAStrandsFor(protein, codons, rnaStrands);
 
-//   Set<string> set1;
-//    set1 += "UUG", "UGG";
-//    rnaStrands.clear();
-//    rnaStrands.add("AAA");
-//    rnaStrands.add("AAG");
-//    rnaStrands = permuteCodons(set1, rnaStrands);
     cout << rnaStrands << endl;
 }
 
