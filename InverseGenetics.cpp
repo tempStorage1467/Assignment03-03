@@ -14,77 +14,67 @@
 #include "console.h"
 using namespace std;
 
+////////// FUNCTION PROTOTYPES //////////
 /*
- * Nucleotides = letters A, C, U, and G
- * RNA Strands = Sequences of four nucleotides, represented as A, C, U, and G
- * Three Nucleotides = Codon
- * Codon = Encodes a specific amino acid
- * Protein = sequence of amino acids
- */
-
-/* Function: listAllRNAStrandsFor(string protein,
- *                                Map<char, Set<string> >& codons);
- * Usage: listAllRNAStrandsFor("PARTY", codons);
- * ==================================================================
  * Given a protein and a map from amino acid codes to the codons for
  * that code, lists all possible RNA strands that could generate
- * that protein
+ * that protein.
  */
 void listAllRNAStrandsFor(string protein, Map<char, Set<string> >& codons);
 
-
-/* Function: loadCodonMap();
- * Usage: Map<char, Lexicon> codonMap = loadCodonMap();
- * ==================================================================
- * Loads the codon mapping table from a file.
- */
+/* Loads the codon mapping table from a file. */
 Map<char, Set<string> > loadCodonMap();
 
+/* Assemble */
+void assembleAllRNAStrandsFor(string protein,
+                              const Map<char, Set<string> >& codons,
+                              Vector<string> rnaStrands);
+
+////////// FUNCTION IMPLEMENTATION //////////
+/*
+ * Main function to run tests and list all RNA strands for a given protein.
+ */
 int main() {
+    //  testAssembleAllRNAStrandsFor();
+    
     /* Load the codon map. */
     Map<char, Set<string> > codons = loadCodonMap();
-
+    
     /* Get protein */
-    string protein = "KWS";
-
+    string protein = "SK";
+    
     /* Assemble RNA Strands */
     listAllRNAStrandsFor(protein, codons);
     return 0;
 }
 
-void permuteCodons(Set<string>& particularCodons, Set<string>& rnaStrands) {
-    if (particularCodons.size() == 0) {
-        return;
-    } else {
-        string codon = particularCodons.first();
-        // stuck.. need to figure out how to recursively
-        // put the codon into each vector but not dup within the codon set
-    }
-}
-
+/*
+ * Assemble RNS strands that could represent a protein with a given amino
+ *   acid sequence.
+ */
 void assembleAllRNAStrandsFor(string protein,
-                           Map<char, Set<string> >& codons,
-                           Set<string>& rnaStrands) {
-    if (protein == "") {
+                              const Map<char, Set<string> >& codons,
+                              Vector<string> rnaStrands) {
+    if (protein.size() == 0) {
+        cout << rnaStrands << endl;
         return;
     } else {
         char aminoAcid = protein[0];
         Set<string> particularCodons = codons.get(aminoAcid);
-        // take each element in $particularCodons and do a cross-join
-        //   with every existing element in $rnaStrands;
-        //   in other words, we need to generate the permutations
-        permuteCodons(particularCodons, rnaStrands);
-
-        assembleAllRNAStrandsFor(protein.substr(1), codons, rnaStrands);
+        for (string codon : particularCodons) {
+            Vector<string> newRnaStrands = rnaStrands;
+            newRnaStrands += codon;
+            assembleAllRNAStrandsFor(protein.substr(1), codons, newRnaStrands);
+        }
     }
 }
 
+/*
+ * Print out all RNA strands for a given amino acid sequence.
+ */
 void listAllRNAStrandsFor(string protein, Map<char, Set<string> >& codons) {
-    Set<string> rnaStrands;
+    Vector<string> rnaStrands;
     assembleAllRNAStrandsFor(protein, codons, rnaStrands);
-    for (string rnaStrand : rnaStrands) {
-        cout << rnaStrands << endl;
-    }
 }
 
 /* You do not need to change this function. */
@@ -105,3 +95,6 @@ Map<char, Set<string> > loadCodonMap() {
     
     return result;
 }
+
+////////// EXTENSION //////////
+
