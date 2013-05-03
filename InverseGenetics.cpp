@@ -34,9 +34,7 @@ void assembleAllRNAStrandsFor(string protein,
 /*
  * Main function to run tests and list all RNA strands for a given protein.
  */
-int main() {
-    //  testAssembleAllRNAStrandsFor();
-    
+int main() {    
     /* Load the codon map. */
     Map<char, Set<string> > codons = loadCodonMap();
     
@@ -95,6 +93,3 @@ Map<char, Set<string> > loadCodonMap() {
     
     return result;
 }
-
-////////// EXTENSION //////////
-
